@@ -7,6 +7,11 @@ const NavBar = () => {
         <Nav>
             <List>
                 <Item>
+                    <NavLink to="/updateDatabase" activeStyle={activeStyle}>
+                        更新資料庫
+                    </NavLink>
+                </Item>
+                <Item>
                     <NavLink to="/foreigninvestors" activeStyle={activeStyle}>
                         外資
                     </NavLink>

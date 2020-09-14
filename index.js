@@ -3,6 +3,9 @@ const express = require('express');
 const app = express();
 const stocksInfo = require('./server/routes/stocksInfo');
 
+const connectDB = require('./server/config/db');
+
+connectDB();
 app.use(express.json());
 
 app.get('/', (req, res) => {
