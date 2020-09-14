@@ -6,7 +6,7 @@ const InvestmentTrust = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const stocksInfo = await axios.get('/stocksInfo');
+            const stocksInfo = await axios.get('/api/stocksInfo');
             setDate(stocksInfo.data);
         }
 

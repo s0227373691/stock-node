@@ -1,7 +1,9 @@
 const express = require('express');
-const fetch = require('node-fetch');
 
 const app = express();
+const stocksInfo = require('./server/routes/stocksInfo');
+
+app.use(express.json());
 
 app.get('/', (req, res) => {
     app.use('/', express.static('./dist'));
@@ -11,14 +13,7 @@ app.get('/', (req, res) => {
     });
 });
 
-app.get('/stocksInfo', (req, res) => {
-    fetch(
-        'https://www.twse.com.tw/fund/TWT44U?response=json&date=&_=1599933809217'
-    )
-        .then((data) => data.json())
-        .then((stocks) => res.send(stocks))
-        .catch((err) => console.log(err));
-});
+app.use('/api/stocksInfo', stocksInfo);
 
 const port = process.env.port || 3000;
 app.listen(port, () => console.log(`listening on port ${port}`));
