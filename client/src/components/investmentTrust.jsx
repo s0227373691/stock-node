@@ -12,6 +12,8 @@ const InvestmentTrust = () => {
 
         fetchData();
     }, []);
+
+    console.log(data);
     return <div>{data ? data.data : 'Loading...'}</div>;
 };
 
