@@ -1,29 +1,20 @@
-import React from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+
+import { fetchSaleShares } from '../api/investmentTrust';
+
 const UpdateDatabase = () => {
-    // try {
-    //     const updateMessage = fetch('/api/test1')
-    //         .then((res) => res.json())
-    //         // .then((res) => console.log(res.json()))
-    //         .catch((err) => console.error(err));
+    const [stockData, setStockData] = useState(null);
+    useEffect(() => {
+        async function fetchStockData() {
+            const data = await fetchSaleShares();
+            setStockData(data);
+        }
+        fetchStockData();
+    }, []);
 
-    //     console.log(updateMessage);
-    // } catch (err) {
-    //     console.error('cc');
-    //     throw new Error(err.msg);
-    // }
-
-    const body = JSON.stringify({
-        stock_code: 'a',
-        stock_name: 'b',
-        buy_shares: 'c',
-        sell_shares: 'd',
-    });
-    axios.post('/api/test', body, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
+    //市值
+    // https://www.twse.com.tw/rsrc/data/zh/home/values.json?_=1600205768914
 
     return <div>UpdateDatabase</div>;
 };

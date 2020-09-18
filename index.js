@@ -2,7 +2,7 @@ const express = require('express');
 
 const app = express();
 const stocksInfo = require('./server/routes/api/stocksInfo');
-const test = require('./server/routes/api/test');
+const updateDatabase = require('./server/routes/api/updateDatabase');
 
 const connectDB = require('./server/config/db');
 
@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/stocksInfo', stocksInfo);
-app.use('/api/test', test);
+app.use('/api/updateDatabase', updateDatabase);
 
 const port = process.env.port || 3000;
 app.listen(port, () => console.log(`listening on port ${port}`));
