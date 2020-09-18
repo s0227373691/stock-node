@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     const juristicPerson = await JuristicPerson.findOne({ date: today });
 
     //判斷DB是否有當天資料
-    if (juristicPerson) {
+    if (juristicPerson) { //TODO 傳入當天日期檢查今天以前資料庫是否有資料
         console.log('y');
     } else {
         console.log('n');
