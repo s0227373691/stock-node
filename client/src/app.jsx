@@ -10,6 +10,7 @@ const App = () => {
             <div>
                 <Nav />
                 <Main />
+                1
             </div>
         </Router>
     )
