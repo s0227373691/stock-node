@@ -8,12 +8,12 @@ import Dealer from './dealer';
 
 const Main = () => {
     return (
-        <div>
+        <>
             <Route path="/updateDatabase" component={UpdateDatabase} />
             <Route path="/foreigninvestors" component={ForeignInvestors} />
             <Route path="/investmenttrust" component={InvestmentTrust} />
             <Route path="/dealer" component={Dealer} />
-        </div>
+        </>
     );
 };
 

@@ -17,24 +17,40 @@ router.get('/', (req, res) => {
         if (day === '0' || day === '6') {
             fetchData();
         } else {
-            const today = dateformat(now, 'yyyymmdd');
-            console.log(today, day);
-            const juristicPerson = await JuristicPerson.findOne({
-                date: today,
-            });
-            if (!juristicPerson) {
-                //TODO 傳入當天日期檢查今天以前資料庫是否有資料
-                const URL = `https://www.twse.com.tw/fund/TWT44U?response=json&date=${today}`;
-                const {
-                    data: { date, fields, data },
-                } = await axios.get(URL);
-                const juristicPersonModule = new JuristicPerson({
-                    date,
-                    fields,
-                    data,
+            try {
+                const today = dateformat(now, 'yyyymmdd');
+                console.log(today, day);
+                const juristicPerson = await JuristicPerson.findOne({
+                    date: today,
                 });
-                await juristicPersonModule.save();
-                await setTimeout(() => fetchData(), 800);
+                if (!juristicPerson) {
+                    //TODO 傳入當天日期檢查今天以前資料庫是否有資料
+                    const URL = `https://www.twse.com.tw/fund/TWT44U?response=json&date=${today}`;
+                    const {
+                        data: { stat, date, fields, data },
+                    } = await axios.get(URL);
+                    if (stat === 'OK') {
+                        fields.shift(); //過濾空欄位
+                        const filterData = data.map((stock) => {
+                            stock.shift();
+                            const param = stock.map((item) => item.trim());
+                            return param;
+                        });
+                        // console.log(data);
+
+                        const juristicPersonModule = new JuristicPerson({
+                            date,
+                            fields,
+                            data: filterData,
+                        });
+                        await juristicPersonModule.save();
+                        await setTimeout(() => fetchData(), 1500);
+                    } else {
+                        await setTimeout(() => fetchData(), 1500);
+                    }
+                }
+            } catch (err) {
+                alert(e.name);
             }
         }
     }

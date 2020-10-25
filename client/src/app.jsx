@@ -1,8 +1,8 @@
-import React from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-import Nav from './components/navBar'
-import Main from './components/main'
+import Nav from './components/navBar';
+import Main from './components/main';
 
 const App = () => {
     return (
@@ -10,10 +10,9 @@ const App = () => {
             <div>
                 <Nav />
                 <Main />
-                1
             </div>
         </Router>
-    )
-}
+    );
+};
 
-export default App
+export default App;
