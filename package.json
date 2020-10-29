@@ -4,19 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
-    "build": "webpack --mode development",
-    "build-w": "webpack --mode development --watch",
-    "prettier-watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}"
+    "client":"npm start --prefix client",
+    "server":"npm start --prefix server",
+    "prettier-watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}",
+    "dev": "concurrently \"npm run client\" \"npm run server\" \"npm run prettier-watch\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dateformat": "^3.0.3",
-    "express": "^4.17.1",
-    "mongoose": "^5.10.5",
-    "node-fetch": "^2.6.1",
-    "nodemon": "^2.0.4",
     "onchange": "^7.0.2",
     "request": "^2.88.2"
   },
