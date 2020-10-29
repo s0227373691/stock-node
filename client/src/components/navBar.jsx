@@ -26,6 +26,11 @@ const NavBar = () => {
                         自營商
                     </NavLink>
                 </Item>
+                <Item>
+                    <NavLink to="/test" activeStyle={activeStyle}>
+                        查詢連日減少成交量
+                    </NavLink>
+                </Item>
             </List>
         </Nav>
     );

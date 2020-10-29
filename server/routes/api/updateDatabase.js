@@ -1,11 +1,117 @@
 const express = require('express');
-const axios = require('axios');
+const Axios = require('axios');
 const dateformat = require('dateformat');
 const router = express.Router();
 
+// 爬蟲
+const request = require('request');
+const iconv = require('iconv-lite');
+
+const StockList = require('../../modules/stockList');
+const StocksTradingVolume = require('../../modules/stocksTradingVolume');
 const JuristicPerson = require('../../modules/juristicPersonNetBuySell');
 
-router.get('/', (req, res) => {
+// 更新個股編號
+router.get('/stocklist', (req, res) => {
+    request(
+        {
+            url: 'https://isin.twse.com.tw/isin/C_public.jsp?strMode=2',
+            method: 'GET',
+            encoding: null,
+        },
+        async function (error, response, body) {
+            stockLength = await StockList.countDocuments();
+            if (stockLength === 947) return;
+
+            if (!error && response.statusCode == 200) {
+                let buf = iconv.decode(body, 'BIG5');
+                const table = buf.split('<tr>');
+                table.shift();
+                table.shift();
+
+                for (let i = 0; i < 947; i++) {
+                    let row = table[i].split('<td bgcolor=#FAFAD2>'); //去首tag
+                    row = row[1].split('</td>'); //去尾tag
+                    row.pop();
+                    const [stockId, stockName] = row[0].split('　');
+
+                    async function saveData() {
+                        const stockList = new StockList({
+                            stockId,
+                            stockName,
+                        });
+
+                        await stockList.save();
+                        console.log(stockId, stockName, '已更新');
+                    }
+                    saveData();
+                }
+            }
+        }
+    );
+    res.send('更新完成');
+});
+
+// 更新個股資訊
+router.get('/stockstradingvolume', (req, res) => {
+    fetchStockList();
+    async function fetchStockList() {
+        const stockList = await StockList.find();
+        fetchData(stockList, 0);
+    }
+
+    async function fetchData(stockList, i) {
+        const stockId = stockList[i].stockId;
+        const url = `https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20201027&stockNo=${stockId}`;
+        const {
+            data: { stat, fields, data },
+        } = await Axios.get(url);
+
+        if (stat === 'OK') {
+            data.map(
+                async ([
+                    date,
+                    tradeVolume,
+                    tradeValue,
+                    openingPrice,
+                    highestPrice,
+                    lowestPrice,
+                    closingPrice,
+                    change,
+                    transaction,
+                ]) => {
+                    const stocksTradingVolume = new StocksTradingVolume({
+                        date,
+                        fields,
+                        stockId,
+                        tradeVolume,
+                        tradeValue,
+                        openingPrice,
+                        highestPrice,
+                        lowestPrice,
+                        closingPrice,
+                        change,
+                        transaction,
+                    });
+                    await stocksTradingVolume.save();
+                    console.log(`已更新  股票代號:${stockId}  日期:${date}`);
+                }
+            );
+        }
+
+        i += 1;
+        console.log(`${i}:${stockList.length}`);
+        if (i < stockList.length) {
+            setTimeout(() => {
+                fetchData(stockList, i);
+            }, 5000);
+        }
+    }
+    // fetchData();
+});
+
+// 更新投信買賣超資訊
+router.get('/investmenttrustcompanies', (req, res) => {
     const now = new Date();
     fetchData();
     async function fetchData() {
@@ -28,7 +134,7 @@ router.get('/', (req, res) => {
                     const URL = `https://www.twse.com.tw/fund/TWT44U?response=json&date=${today}`;
                     const {
                         data: { stat, date, fields, data },
-                    } = await axios.get(URL);
+                    } = await Axios.get(URL);
                     if (stat === 'OK') {
                         fields.shift(); //過濾空欄位
                         const filterData = data.map((stock) => {
@@ -44,13 +150,13 @@ router.get('/', (req, res) => {
                             data: filterData,
                         });
                         await juristicPersonModule.save();
-                        await setTimeout(() => fetchData(), 1500);
+                        await setTimeout(() => fetchData(), 1600);
                     } else {
-                        await setTimeout(() => fetchData(), 1500);
+                        await setTimeout(() => fetchData(), 1600);
                     }
                 }
-            } catch (err) {
-                alert(e.name);
+            } catch (error) {
+                console.log(error.name);
             }
         }
     }

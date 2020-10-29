@@ -7,10 +7,8 @@ import Main from './components/main';
 const App = () => {
     return (
         <Router>
-            <div>
-                <Nav />
-                <Main />
-            </div>
+            <Nav />
+            <Main />
         </Router>
     );
 };

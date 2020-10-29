@@ -1,8 +1,10 @@
 import axios from 'axios';
 
-export const fetchSaleShares = async () => {
+const fetchSaleShares = async (setValue) => {
     const { data } = await axios
-        .get('/api/updateDatabase')
+        .get('/api/updateDatabase/investmenttrustcompanies')
         .catch((err) => console.error(err));
-    return data;
+    setValue(data);
 };
+
+export default fetchSaleShares;

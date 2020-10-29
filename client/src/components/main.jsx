@@ -1,19 +1,21 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
-import UpdateDatabase from './updateDatabase';
+import Update from './update';
 import InvestmentTrust from './investmentTrust';
 import ForeignInvestors from './foreignInvestors';
 import Dealer from './dealer';
+import Query from './query';
 
 const Main = () => {
     return (
-        <>
-            <Route path="/updateDatabase" component={UpdateDatabase} />
+        <Switch>
+            <Route path="/updateDatabase" component={Update} />
             <Route path="/foreigninvestors" component={ForeignInvestors} />
             <Route path="/investmenttrust" component={InvestmentTrust} />
             <Route path="/dealer" component={Dealer} />
-        </>
+            <Route path="/test" component={Query} />
+        </Switch>
     );
 };
 
