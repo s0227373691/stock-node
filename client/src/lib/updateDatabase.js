@@ -1,9 +1,16 @@
 import axios from 'axios';
 
+const config = {};
+
 // 個股成交資訊
 export const updateStocksId = async () => {
-    await axios
-        .get('/api/updateDatabase/stocklist')
+    const config = {
+        method: 'get',
+        baseURL: 'http://localhost:3000',
+        url: '/api/updateDatabase/stocklist',
+    };
+
+    await axios(config)
         .then((res) => {
             if (res.status === 200) alert('更新完成');
         })
