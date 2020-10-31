@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "client":"npm start --prefix client",
-    "server":"npm start --prefix server",
+    "client": "npm start --prefix client",
+    "server": "npm start --prefix server",
     "prettier-watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}",
     "dev": "concurrently \"npm run client\" \"npm run server\" \"npm run prettier-watch\""
   },
