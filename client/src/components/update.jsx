@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-// import fetchSaleShares from '../api/investmentTrust';
 import {
     updateStocksId,
     updateStocksTradingVolume,
@@ -8,11 +7,6 @@ import {
 } from '../lib/updateDatabase';
 
 const Update = () => {
-    // const [stockData, setStockData] = useState(null);
-    // useEffect(() => {
-    //     fetchSaleShares(setStockData);
-    // }, []);
-
     return (
         <div>
             <h2>UpdateDatabase</h2>
